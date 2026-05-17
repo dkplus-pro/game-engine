@@ -1,0 +1,90 @@
+---
+description: 代码风格：数据驱动与提前返回
+alwaysApply: true
+---
+
+# 代码风格
+
+- 优先使用数据驱动、表驱动、配置化的方式组织代码。
+- 对于状态、类型、key 到文案、颜色、图标、组件、处理函数的映射，优先使用数组配置、对象 Map、Record 或策略对象。
+- 需要保持顺序，或需要用于页面渲染的配置，优先使用数组 + find/map。
+- 简单 key-value 映射，优先使用对象 Map / Record。
+- 不同类型对应不同处理逻辑时，优先使用 strategy map，避免写过长的 if/else 或 switch。
+- 不要为了消灭 if/else 过度抽象；简单二选一逻辑可以保留 if/else。
+
+# 提前返回
+
+- 对于过长的 if/else 或多层嵌套条件，优先使用 early return / guard clause。
+- 优先处理空值、异常、错误、无权限、边界条件，并直接 return。
+- 主业务流程尽量保持在最外层，减少嵌套层级。
+- 如果 if 分支中已经 return，不要再写不必要的 else。
+- 表单校验、权限判断、状态拦截、接口异常处理等场景，优先使用提前返回。
+- 简单清晰的 if/else 不需要强行改写。
+
+# 示例偏好
+
+优先这样写：
+
+```ts
+function submitForm(data) {
+  if (!data.name) {
+    return showToast('请输入姓名');
+  }
+
+  if (!data.phone) {
+    return showToast('请输入手机号');
+  }
+
+  if (!data.agree) {
+    return showToast('请先同意协议');
+  }
+
+  return submit(data);
+}
+```
+
+避免这样写：
+
+```ts
+function submitForm(data) {
+  if (data.name) {
+    if (data.phone) {
+      if (data.agree) {
+        return submit(data);
+      } else {
+        return showToast('请先同意协议');
+      }
+    } else {
+      return showToast('请输入手机号');
+    }
+  } else {
+    return showToast('请输入姓名');
+  }
+}
+```
+
+优先这样写：
+
+```ts
+const statusList = [
+  { value: 0, label: '待处理' },
+  { value: 1, label: '处理中' },
+  { value: 2, label: '已完成' },
+];
+
+const statusText = statusList.find((item) => item.value === status)?.label || '未知状态';
+```
+
+避免这样写：
+
+```ts
+let statusText = '未知状态';
+
+if (status === 0) {
+  statusText = '待处理';
+} else if (status === 1) {
+  statusText = '处理中';
+} else if (status === 2) {
+  statusText = '已完成';
+}
+```

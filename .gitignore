@@ -1,0 +1,12 @@
+node_modules
+.turbo
+.idea
+.DS_Store
+dist
+unpackage
+apps/*/src/components/shared-ui
+apps/*/src/subpackages/*/components/shared-ui
+apps/*/src/workspace-utils
+apps/*/src/subpackages/*/workspace-utils
+*.local
+*.log

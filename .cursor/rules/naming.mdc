@@ -1,0 +1,16 @@
+---
+description: 命名规范：变量、函数、参数需要语义化
+alwaysApply: true
+---
+
+# 命名规范
+
+- 变量名、函数名、参数名必须语义化，避免使用单个字母或无意义缩写。
+- 不要使用 `a`、`b`、`c`、`x`、`y`、`z`、`temp`、`obj` 这类含义不明确的命名。
+- 避免滥用 `data`、`item`、`list`，除非上下文非常清晰。
+- 变量名应表达业务含义，例如 `userInfo`、`orderList`、`selectedOptions`、`currentQuestion`。
+- 函数名应表达动作和目的，例如 `getUserInfo`、`submitClarifyAnswer`、`formatMessageList`。
+- 布尔值变量优先使用 `is`、`has`、`can`、`should` 开头，例如 `isLoading`、`hasPermission`、`canSubmit`。
+- 数组变量优先使用复数或 `List` 结尾，例如 `users`、`messageList`、`optionList`。
+- 事件处理函数优先使用 `handle` 开头，例如 `handleSubmit`、`handleSelectOption`。
+- 只有在非常局部、含义明确的场景下，才允许使用 `i`、`j` 作为循环索引。
