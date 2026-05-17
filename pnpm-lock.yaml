@@ -85,6 +85,25 @@ importers:
         specifier: ^6.3.5
         version: 6.4.2(@types/node@25.8.0)(jiti@2.6.1)
 
+  apps/demo-platformer:
+    dependencies:
+      '@game-engine/core':
+        specifier: workspace:*
+        version: link:../../packages/game-engine
+      '@game-engine/renderer-canvas':
+        specifier: workspace:*
+        version: link:../../packages/game-renderer-canvas
+    devDependencies:
+      '@dkplus/tsconfig':
+        specifier: workspace:*
+        version: link:../../packages/tsconfig
+      typescript:
+        specifier: ^5.8.3
+        version: 5.9.3
+      vite:
+        specifier: ^6.3.5
+        version: 6.4.2(@types/node@25.8.0)(jiti@2.6.1)
+
   packages/eslint-config:
     dependencies:
       '@eslint/js':
