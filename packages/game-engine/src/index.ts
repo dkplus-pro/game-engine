@@ -16,3 +16,5 @@ export { Scene, SceneConfig, SceneManager } from './scene';
 export { FadeTransition, TransitionEffect } from './scene/Transition';
 export type { Entity, ComponentType } from './ecs/World';
 export type { ComponentStore } from './ecs/Component';
+export type { Behavior } from './behavior/Behavior';
+export { BehaviorSystem } from './behavior/BehaviorSystem';

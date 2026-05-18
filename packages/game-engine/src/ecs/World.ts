@@ -1,17 +1,24 @@
-import {
-  type ComponentType,
-  type ComponentStore,
-  ComponentStore as ComponentStoreClass,
-  defineComponent,
-  getComponentId,
-} from './Component';
+import { type ComponentType, type ComponentStore, ComponentStore as ComponentStoreClass, defineComponent, getComponentId } from './Component';
 import { type Entity, createEntity, destroyEntity, isEntityAlive } from './Entity';
 import type { System } from './System';
+import type { Behavior } from '../behavior/Behavior';
+import { BehaviorStore } from '../behavior/BehaviorStore';
+import { BehaviorSystem } from '../behavior/BehaviorSystem';
+import { EventBus } from '../core/EventBus';
+import { InputManager } from '../input';
 
 export class World {
   private entities = new Set<Entity>();
   private stores = new Map<number, ComponentStore<any>>();
   private systems: System[] = [];
+  private _behaviorStore = new BehaviorStore();
+  private eventBus: EventBus;
+  private inputManager: InputManager;
+
+  constructor(eventBus?: EventBus, inputManager?: InputManager) {
+    this.eventBus = eventBus || new EventBus();
+    this.inputManager = inputManager || new InputManager();
+  }
 
   createEntity(): Entity {
     const entity = createEntity();
@@ -20,6 +27,15 @@ export class World {
   }
 
   destroyEntity(entity: Entity): void {
+    // Call onDestroy for all behaviors before removing
+    const behaviors = this._behaviorStore.getAll(entity);
+    for (const [name, behavior] of behaviors) {
+      if (behavior.onDestroy) {
+        behavior.onDestroy(this, entity);
+      }
+    }
+    this._behaviorStore.removeAll(entity);
+
     // Remove all components
     for (const store of this.stores.values()) {
       if (store.has(entity)) {
@@ -107,9 +123,58 @@ export class World {
     }
   }
 
-  private getStoreSize(type: ComponentType): number {
+  getStoreSize(type: ComponentType): number {
     const id = getComponentId(type);
     return this.stores.get(id)?.size ?? 0;
+  }
+
+  /** Get the EventBus instance */
+  getEventBus(): EventBus {
+    return this.eventBus;
+  }
+
+  /** Get the InputManager instance */
+  getInputManager(): InputManager {
+    return this.inputManager;
+  }
+
+  /** Add a behavior to an entity */
+  addBehavior(entity: Entity, name: string, behavior: Behavior): void {
+    this._behaviorStore.add(entity, name, behavior);
+    // Call onCreate immediately
+    if (behavior.onCreate) {
+      behavior.onCreate(this, entity);
+    }
+  }
+
+  /** Remove a behavior from an entity */
+  removeBehavior(entity: Entity, name: string): void {
+    const behavior = this._behaviorStore.get(entity, name);
+    if (behavior && behavior.onDestroy) {
+      behavior.onDestroy(this, entity);
+    }
+    this._behaviorStore.remove(entity, name);
+  }
+
+  /** Get a behavior from an entity */
+  getBehavior(entity: Entity, name: string): Behavior | undefined {
+    return this._behaviorStore.get(entity, name);
+  }
+
+  /** Get all behaviors of an entity */
+  getBehaviors(entity: Entity): Map<string, Behavior> {
+    return this._behaviorStore.getAll(entity);
+  }
+
+  /** Remove all behaviors from an entity */
+  removeAllBehaviors(entity: Entity): void {
+    const behaviors = this._behaviorStore.getAll(entity);
+    for (const [name, behavior] of behaviors) {
+      if (behavior.onDestroy) {
+        behavior.onDestroy(this, entity);
+      }
+    }
+    this._behaviorStore.removeAll(entity);
   }
 }
 
