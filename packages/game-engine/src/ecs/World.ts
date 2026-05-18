@@ -5,7 +5,7 @@ import {
   defineComponent,
   getComponentId,
 } from './Component';
-import { type Entity, createEntity, destroyEntity } from './Entity';
+import { type Entity, createEntity, destroyEntity, isEntityAlive } from './Entity';
 import type { System } from './System';
 
 export class World {
@@ -105,5 +105,5 @@ export class World {
   }
 }
 
-export { defineComponent, createEntity, destroyEntity };
+export { defineComponent, createEntity, destroyEntity, isEntityAlive };
 export type { Entity, ComponentType, System };

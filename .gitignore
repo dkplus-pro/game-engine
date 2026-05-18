@@ -10,3 +10,4 @@ apps/*/src/workspace-utils
 apps/*/src/subpackages/*/workspace-utils
 *.local
 *.log
+.pnpm-store/*

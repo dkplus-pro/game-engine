@@ -2,6 +2,7 @@ export interface TileDef {
   id: number;
   color: string;
   solid: boolean;
+  image?: HTMLImageElement;
 }
 
 export interface TilemapLayer {

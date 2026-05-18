@@ -13,19 +13,18 @@ export function getComponentId(type: ComponentType): number {
   return componentIds.get(type) ?? -1;
 }
 
-/**
- * SparseSet-based component storage.
- * dense[] — packed array of Entity IDs that have this component
- * sparse[] — for each entity, stores its index in dense (or -1 if absent)
- * data[] — parallel to dense, stores the component data
- */
 export class ComponentStore<T> {
   private dense: number[] = [];
   private sparse: number[] = [];
   private data: T[] = [];
+  private pool: T[] = [];
 
   get size(): number {
     return this.dense.length;
+  }
+
+  get poolSize(): number {
+    return this.pool.length;
   }
 
   has(entity: number): boolean {
@@ -54,9 +53,10 @@ export class ComponentStore<T> {
     const idx = this.sparse[entity];
     if (idx === undefined || idx === -1) return;
 
+    this.pool.push(this.data[idx]);
+
     const lastIdx = this.dense.length - 1;
     if (idx !== lastIdx) {
-      // Swap-remove: move last element into the removed slot
       const lastEntity = this.dense[lastIdx];
       this.dense[idx] = lastEntity;
       this.data[idx] = this.data[lastIdx];
@@ -68,7 +68,14 @@ export class ComponentStore<T> {
     this.sparse[entity] = -1;
   }
 
-  /** Iterate over all (entity, data) pairs */
+  acquire(): T | undefined {
+    return this.pool.length > 0 ? this.pool.pop() : undefined;
+  }
+
+  clearPool(): void {
+    this.pool.length = 0;
+  }
+
   entities(): Iterable<{ entity: number; data: T }> {
     const { dense, data } = this;
     return {
@@ -80,12 +87,10 @@ export class ComponentStore<T> {
     };
   }
 
-  /** Iterate entity IDs only */
   entityIds(): number[] {
     return this.dense;
   }
 
-  /** Iterate component data only */
   raw(): readonly T[] {
     return this.data;
   }

@@ -7,3 +7,4 @@ export { RenderSystem } from './systems/RenderSystem';
 export { AnimationSystem } from './systems/AnimationSystem';
 export { CameraSystem } from './systems/CameraSystem';
 export { TilemapRenderer, TilemapCollider, createTilemap, getTileById, type TilemapData, type TileDef, type TilemapLayer, type TileCollider, type Viewport } from './tilemap';
+export { ImageResourceLoader } from './resource/ImageResourceLoader';

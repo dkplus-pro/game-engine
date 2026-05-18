@@ -5,6 +5,7 @@ export interface SpriteData {
   width: number;
   height: number;
   zIndex?: number;
+  image?: HTMLImageElement;
 }
 
 export const Sprite: ComponentType<SpriteData> = defineComponent<SpriteData>();
@@ -15,5 +16,6 @@ export function createSprite(color: string, width: number, height: number, optio
     width,
     height,
     zIndex: options?.zIndex ?? 0,
+    image: options?.image,
   };
 }

@@ -9,5 +9,7 @@ export { CollisionBox, createCollisionBox, type CollisionBoxData } from './physi
 export { CollisionMatrix, LAYER_DEFAULT, LAYER_PLAYER, LAYER_ENVIRONMENT, LAYER_ENEMY, LAYER_PROJECTILE } from './physics/CollisionLayer';
 export { PhysicsSystem } from './physics/PhysicsSystem';
 export { CollisionSystem, type CollisionEvent } from './physics/CollisionSystem';
+export { ResourceManager, type Resource, type ResourceLoader } from './resource';
+export { Stats, DebugOverlay } from './debug';
 export type { Entity, ComponentType } from './ecs/World';
 export type { ComponentStore } from './ecs/Component';
