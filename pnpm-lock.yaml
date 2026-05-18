@@ -66,6 +66,25 @@ importers:
         specifier: ^2.2.10
         version: 2.2.12(typescript@5.9.3)
 
+  apps/demo-audio:
+    dependencies:
+      '@game-engine/audio':
+        specifier: workspace:*
+        version: link:../../packages/game-audio
+      '@game-engine/core':
+        specifier: workspace:*
+        version: link:../../packages/game-engine
+    devDependencies:
+      '@dkplus/tsconfig':
+        specifier: workspace:*
+        version: link:../../packages/tsconfig
+      typescript:
+        specifier: ^5.8.3
+        version: 5.9.3
+      vite:
+        specifier: ^6.3.5
+        version: 6.4.2(@types/node@25.8.0)(jiti@2.6.1)
+
   apps/demo-basic:
     dependencies:
       '@game-engine/core':
@@ -165,6 +184,22 @@ importers:
       vue-eslint-parser:
         specifier: ^10.0.0
         version: 10.4.0(eslint@9.39.4(jiti@2.6.1))
+
+  packages/game-audio:
+    dependencies:
+      '@game-engine/core':
+        specifier: workspace:*
+        version: link:../game-engine
+    devDependencies:
+      '@dkplus/eslint-config':
+        specifier: workspace:*
+        version: link:../eslint-config
+      '@dkplus/tsconfig':
+        specifier: workspace:*
+        version: link:../tsconfig
+      typescript:
+        specifier: ^5.8.3
+        version: 5.9.3
 
   packages/game-engine:
     devDependencies:

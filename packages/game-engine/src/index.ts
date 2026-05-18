@@ -11,5 +11,6 @@ export { PhysicsSystem } from './physics/PhysicsSystem';
 export { CollisionSystem, type CollisionEvent } from './physics/CollisionSystem';
 export { ResourceManager, type Resource, type ResourceLoader } from './resource';
 export { Stats, DebugOverlay } from './debug';
+export { AudioSource, createAudioSource, type AudioSourceData } from './audio';
 export type { Entity, ComponentType } from './ecs/World';
 export type { ComponentStore } from './ecs/Component';

@@ -1,0 +1,1 @@
+export { AudioSource, createAudioSource, type AudioSourceData } from './types';
