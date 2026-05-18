@@ -1,4 +1,4 @@
-export { World, defineComponent } from './ecs/World';
+export { World, defineComponent, clearEntities } from './ecs/World';
 export { System } from './ecs/System';
 export { GameLoop } from './core/GameLoop';
 export { EventBus } from './core/EventBus';
@@ -12,5 +12,7 @@ export { CollisionSystem, type CollisionEvent } from './physics/CollisionSystem'
 export { ResourceManager, type Resource, type ResourceLoader } from './resource';
 export { Stats, DebugOverlay } from './debug';
 export { AudioSource, createAudioSource, type AudioSourceData } from './audio';
+export { Scene, SceneConfig, SceneManager } from './scene';
+export { FadeTransition, TransitionEffect } from './scene/Transition';
 export type { Entity, ComponentType } from './ecs/World';
 export type { ComponentStore } from './ecs/Component';

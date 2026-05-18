@@ -99,6 +99,14 @@ export class World {
     }
   }
 
+  clearEntities(): void {
+    const entities: Entity[] = [];
+    this.entities.forEach(entity => entities.push(entity));
+    for (const entity of entities) {
+      this.destroyEntity(entity);
+    }
+  }
+
   private getStoreSize(type: ComponentType): number {
     const id = getComponentId(type);
     return this.stores.get(id)?.size ?? 0;
