@@ -1,3 +1,3 @@
-export { Scene, SceneConfig } from './Scene';
+export { Scene, type SceneConfig } from './Scene';
 export { SceneManager } from './SceneManager';
-export { FadeTransition, TransitionEffect } from './Transition';
+export { FadeTransition, type TransitionEffect } from './Transition';

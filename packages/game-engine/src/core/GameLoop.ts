@@ -65,9 +65,10 @@ export class GameLoop {
       const dt = elapsed / 1000;
       this.lastTime = timestamp - (this.frameInterval > 0 ? elapsed % this.frameInterval : 0);
 
-      if (this.transition && this.currentTransitionProgress !== undefined) {
+      const transition = this.transition;
+      if (transition && this.currentTransitionProgress !== undefined) {
         this.world.clearEntities();
-        this.transition.onEnter?.(this.getCanvasContext(), this.currentTransitionProgress);
+        transition.onEnter?.(this.getCanvasContext(), this.currentTransitionProgress);
         if (this.currentTransitionProgress >= 1) {
           this.currentTransitionProgress = undefined;
         }
@@ -84,7 +85,8 @@ export class GameLoop {
   private currentTransitionProgress: number | undefined;
 
   startTransition(duration: number): void {
-    if (!this.transition) return;
+    const transition = this.transition;
+    if (!transition) return;
     this.currentTransitionProgress = 0;
     const step = 16 / (duration * 1000);
 
@@ -92,7 +94,7 @@ export class GameLoop {
       if (this.currentTransitionProgress !== undefined) {
         this.currentTransitionProgress = Math.min(1, this.currentTransitionProgress + step);
         this.getCanvasContext().clearRect(0, 0, this.getCanvasContext().canvas.width, this.getCanvasContext().canvas.height);
-        this.transition.onEnter?.(this.getCanvasContext(), this.currentTransitionProgress);
+        transition.onEnter?.(this.getCanvasContext(), this.currentTransitionProgress);
 
         if (this.currentTransitionProgress < 1) {
           requestAnimationFrame(animate);

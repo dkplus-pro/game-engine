@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tank Battle - 90s Style</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background: #0a0a0a;
+      overflow: hidden;
+      font-family: 'Courier New', monospace;
+    }
+    #gameContainer {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+    }
+    #ui-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 10;
+    }
+    #hud {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      color: #00ff41;
+      font-size: 24px;
+      text-shadow: 0 0 10px #00ff41;
+      display: flex;
+      gap: 30px;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+    }
+    .hud-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .hud-label {
+      font-size: 12px;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    .hud-value {
+      font-size: 28px;
+      color: #00ff41;
+      text-shadow: 0 0 15px #00ff41;
+    }
+    #lives {
+      color: #ff3366;
+      text-shadow: 0 0 15px #ff3366;
+    }
+    #level-display {
+      color: #ffcc00;
+      text-shadow: 0 0 15px #ffcc00;
+    }
+    .health-bar-container {
+      width: 80px;
+      height: 10px;
+      background: #333;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    .health-bar {
+      width: 100%;
+      height: 100%;
+      background: #40c057;
+      transition: width 0.2s;
+      box-shadow: 0 0 5px #40c057;
+    }
+    #game-over-screen {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      pointer-events: all;
+    }
+    #game-over-screen.visible {
+      display: flex;
+    }
+    #game-over-title {
+      font-size: 64px;
+      color: #ff3366;
+      text-shadow: 0 0 30px #ff3366;
+      margin-bottom: 20px;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+    }
+    #final-score {
+      font-size: 32px;
+      color: #00ff41;
+      margin-bottom: 40px;
+      text-shadow: 0 0 15px #00ff41;
+    }
+    #restart-btn {
+      font-family: 'Courier New', monospace;
+      font-size: 20px;
+      font-weight: bold;
+      padding: 15px 40px;
+      background: transparent;
+      color: #00ff41;
+      border: 2px solid #00ff41;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      transition: all 0.3s;
+      pointer-events: all;
+    }
+    #restart-btn:hover {
+      background: #00ff41;
+      color: #000;
+      box-shadow: 0 0 20px #00ff41;
+    }
+    #level-up-screen {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      pointer-events: all;
+    }
+    #level-up-screen.visible {
+      display: flex;
+    }
+    #level-up-title {
+      font-size: 48px;
+      color: #ffcc00;
+      text-shadow: 0 0 30px #ffcc00;
+      margin-bottom: 20px;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+    }
+    #powerup-indicator {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      color: #ffcc00;
+      font-size: 18px;
+      font-family: 'Courier New', monospace;
+    }
+    .powerup-icon {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      margin-right: 5px;
+      vertical-align: middle;
+    }
+    #controls-hint {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      color: #666;
+      font-size: 14px;
+      font-family: 'Courier New', monospace;
+    }
+    #game-title {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: #00aaff;
+      font-size: 18px;
+      font-family: 'Courier New', monospace;
+      text-shadow: 0 0 10px #00aaff;
+    }
+  </style>
+</head>
+<body>
+  <div id="gameContainer">
+    <canvas id="gameCanvas"></canvas>
+    <div id="ui-overlay">
+      <div id="game-title">TANK BATTLE 90s</div>
+      <div id="hud">
+        <div class="hud-item">
+          <span class="hud-label">Score</span>
+          <span class="hud-value" id="score">0</span>
+        </div>
+        <div class="hud-item">
+          <span class="hud-label">Lives</span>
+          <span class="hud-value" id="lives">3</span>
+        </div>
+        <div class="hud-item">
+          <span class="hud-label">Level</span>
+          <span class="hud-value" id="level-display">1</span>
+        </div>
+        <div class="hud-item">
+          <span class="hud-label">HP</span>
+          <div class="health-bar-container">
+            <div class="health-bar" id="hp-bar"></div>
+          </div>
+        </div>
+      </div>
+      <div id="powerup-indicator"></div>
+      <div id="controls-hint">WASD / Arrows: Move | SPACE: Shoot</div>
+      <div id="game-over-screen">
+        <div id="game-over-title">GAME OVER</div>
+        <div id="final-score">Score: 0</div>
+        <button id="restart-btn">Restart</button>
+      </div>
+      <div id="level-up-screen">
+        <div id="level-up-title">LEVEL COMPLETE!</div>
+        <div id="level-complete-score" style="color:#00ff41;font-size:24px;margin-bottom:30px;">Score: 0</div>
+        <button id="next-level-btn" style="font-family:'Courier New',monospace;font-size:20px;font-weight:bold;padding:15px 40px;background:transparent;color:#00ff41;border:2px solid #00ff41;cursor:pointer;text-transform:uppercase;letter-spacing:3px;transition:all 0.3s;">Next Level</button>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
