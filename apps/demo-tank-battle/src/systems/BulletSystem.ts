@@ -3,7 +3,7 @@ import { Transform, type TransformData, Sprite, type SpriteData } from '@game-en
 import {
   Dir, DX, DY, BulletComponent, BulletData, BULLET_SIZE,
   Tank, TankData, WallComponent, WallData, BaseComponent, BaseData,
-  HALF_TANK,
+  OFFSET_X, OFFSET_Y, GAME_W, GAME_H,
 } from '../constants';
 
 export class BulletSystem extends System {
@@ -26,10 +26,20 @@ export class BulletSystem extends System {
       t.x += DX[b.dir] * spd;
       t.y += DY[b.dir] * spd;
 
+      if (this.outOfBounds(t)) {
+        world.destroyEntity(bullet);
+        continue;
+      }
+
       if (this.checkCollisions(world, bullet, b, t)) {
         world.destroyEntity(bullet);
       }
     }
+  }
+
+  private outOfBounds(t: TransformData): boolean {
+    return t.x < OFFSET_X || t.x > OFFSET_X + GAME_W ||
+           t.y < OFFSET_Y || t.y > OFFSET_Y + GAME_H;
   }
 
   private checkCollisions(world: World, bullet: number, b: BulletData, t: TransformData): boolean {

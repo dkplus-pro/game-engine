@@ -3,8 +3,8 @@ import { Transform, type TransformData, Sprite, type SpriteData } from '@game-en
 import {
   Dir, DX, DY, Tank, TankData,
   BULLET_SPEED, PLAYER_SPEED, HALF_TANK, CELL,
-  isPerpendicular, BulletComponent, BulletData,
-  OFFSET_X, OFFSET_Y, WallComponent, BaseComponent,
+  isPerpendicular, clamp, BulletComponent, BulletData,
+  OFFSET_X, OFFSET_Y, MIN_X, MAX_X, MIN_Y, MAX_Y,
 } from '../constants';
 
 export class PlayerSystem extends System {
@@ -86,8 +86,8 @@ export class PlayerSystem extends System {
     const nx = t.x + DX[tank.direction] * spd;
     const ny = t.y + DY[tank.direction] * spd;
     if (!this.hitsAnything(world, nx, ny, entity)) {
-      t.x = nx;
-      t.y = ny;
+      t.x = clamp(nx, MIN_X, MAX_X);
+      t.y = clamp(ny, MIN_Y, MAX_Y);
     }
   }
 

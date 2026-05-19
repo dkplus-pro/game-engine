@@ -17,7 +17,7 @@ function baseWalls(): { col: number; row: number }[] {
 }
 
 export const LEVEL_1: LevelConfig = {
-  playerCol: 12,
+  playerCol: 8,
   playerRow: 19,
   enemyCount: 4,
   bricks: [
@@ -36,7 +36,7 @@ export const LEVEL_1: LevelConfig = {
 };
 
 export const LEVEL_2: LevelConfig = {
-  playerCol: 12,
+  playerCol: 8,
   playerRow: 16,
   enemyCount: 6,
   bricks: [
@@ -59,7 +59,7 @@ export const LEVEL_2: LevelConfig = {
 };
 
 export const LEVEL_3: LevelConfig = {
-  playerCol: 12,
+  playerCol: 8,
   playerRow: 16,
   enemyCount: 8,
   bricks: [

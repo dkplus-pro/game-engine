@@ -3,7 +3,7 @@ import { Transform, type TransformData, Sprite, type SpriteData } from '@game-en
 import {
   Dir, DX, DY, Tank, TankData, BulletComponent, BulletData,
   ENEMY_SPEED, BULLET_SPEED, HALF_TANK, CELL,
-  OFFSET_X, OFFSET_Y,
+  clamp, MIN_X, MAX_X, MIN_Y, MAX_Y,
 } from '../constants';
 
 export class EnemySystem extends System {
@@ -53,8 +53,8 @@ export class EnemySystem extends System {
       const dirs = [Dir.Up, Dir.Down, Dir.Left, Dir.Right];
       td.direction = dirs[Math.floor(Math.random() * 4)];
     } else {
-      t.x = nx;
-      t.y = ny;
+      t.x = clamp(nx, MIN_X, MAX_X);
+      t.y = clamp(ny, MIN_Y, MAX_Y);
     }
   }
 

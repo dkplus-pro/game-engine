@@ -8,7 +8,7 @@ export const ROWS = 22;
 export const GAME_W = COLS * CELL;
 export const GAME_H = ROWS * CELL;
 export const OFFSET_X = (CANVAS_W - GAME_W) / 2;
-export const OFFSET_Y = 20;
+export const OFFSET_Y = (CANVAS_H - GAME_H) / 2;
 
 export const TANK_SIZE = 44;
 export const HALF_TANK = 22;
@@ -17,6 +17,10 @@ export const WALL_H = CELL * 2;
 export const BULLET_SIZE = 8;
 
 export const PLAYER_SPEED = 140;
+export const MIN_X = OFFSET_X + HALF_TANK;
+export const MAX_X = OFFSET_X + GAME_W - HALF_TANK;
+export const MIN_Y = OFFSET_Y + HALF_TANK;
+export const MAX_Y = OFFSET_Y + GAME_H - HALF_TANK;
 export const ENEMY_SPEED = 80;
 export const BULLET_SPEED = 300;
 export const PLAYER_COLOR = '#ffcc00';
@@ -37,6 +41,10 @@ export const DY: Record<Dir, number> = {
 
 export function isPerpendicular(a: Dir, b: Dir): boolean {
   return (a === Dir.Up || a === Dir.Down) !== (b === Dir.Up || b === Dir.Down);
+}
+
+export function clamp(v: number, min: number, max: number): number {
+  return v < min ? min : v > max ? max : v;
 }
 
 export function wallCenter(col: number, row: number) {
